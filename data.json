@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "id": 2,
+      "name": "Ice cream sandwich",
+      "calories": 237,
+      "fat": 9,
+      "carbs": 37,
+      "protein": 4.3
+    },
+    {
+      "id": 3,
+      "name": "Gingerbread",
+      "calories": 356,
+      "fat": 16,
+      "carbs": 49,
+      "protein": 3.9
+    },
+    {
+      "id": 4,
+      "name": "Eclair",
+      "calories": 262,
+      "fat": 16,
+      "carbs": 24,
+      "protein": 6
+    },
+    {
+      "id": 5,
+      "name": "Ice cream sandwich",
+      "calories": 237,
+      "fat": 9,
+      "carbs": 37,
+      "protein": 4.3
+    },
+    {
+      "id": 6,
+      "name": "Eclair",
+      "calories": 262,
+      "fat": 16,
+      "carbs": 24,
+      "protein": 6
+    },
+    {
+      "id": 7,
+      "name": "Gingerbread",
+      "calories": 356,
+      "fat": 16,
+      "carbs": 49,
+      "protein": 3.9
+    }
+  ]
+}
