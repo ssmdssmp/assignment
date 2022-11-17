@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { createNewItem } from '../../hooks/http.hook';
 import { useDispatch, useSelector } from 'react-redux';
+import { handleIsOpenForm } from '../../reducers/tableSlice';
 
 const validationSchema = yup.object({
   name: yup
@@ -51,7 +52,9 @@ export const MainForm = () => {
       createNewItem(values);
       // @ts-ignore
       dispatch(addRow(values));
+      dispatch(handleIsOpenForm());
       setRows();
+      
     },
   });
 

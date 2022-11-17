@@ -47,6 +47,14 @@
       "fat": 16,
       "carbs": 49,
       "protein": 3.9
+    },
+    {
+      "id": 8,
+      "name": "Ice cream sandwich",
+      "calories": "123123",
+      "fat": "44",
+      "carbs": "123",
+      "protein": "21"
     }
   ]
 }

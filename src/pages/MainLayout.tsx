@@ -3,7 +3,8 @@ import {MainForm} from '../components/Form/Form';
 import Button from '@mui/material/Button';
 import { Transition } from 'react-transition-group';
 import { useRef } from 'react';
-import { useState } from 'react';
+import { handleIsOpenForm } from '../reducers/tableSlice';
+
 import {setRows} from '../reducers/tableSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -16,9 +17,9 @@ const MainLayout = () =>{
    dispatch(setRows());
    
   },[]);
-  // @ts-ignore
-  const rows:any = useSelector(({table}) => table.rows);
-  const [isOpenForm, setIsOpenForm] = useState(false);
+  
+  const rows:any = useSelector(({table}:any) => table.rows);
+  const isOpenForm = useSelector(({table}:any) => table.isOpenForm);
   const defaultStyleWrapper = {
     filter: 'blur(0px)',
     transition: 'filter 0.2s ease-in-out'
@@ -44,7 +45,7 @@ const MainLayout = () =>{
   const TableWrapperRef=useRef(null);
     return (
         <>
-         <div style={{display: isOpenForm ? 'block' :'none'}} onClick={() => setIsOpenForm(!isOpenForm)} className="form-open-filter"></div>
+         <div style={{display: isOpenForm ? 'block' :'none'}} onClick={() => dispatch(handleIsOpenForm())} className="form-open-filter"></div>
        <Transition timeout={0} in={isOpenForm} >
       {state => (
          <div className="popup" style={{
@@ -67,7 +68,7 @@ const MainLayout = () =>{
           ...transitionStylesWrapper[state]
         }}>
      <div className="open-form-button">
-     <Button onClick={() =>  setIsOpenForm(!isOpenForm)} variant='contained'>Create New Item</Button>
+     <Button onClick={() =>  dispatch(handleIsOpenForm())} variant='contained'>Create New Item</Button>
      </div>
     <div className="table-layout-wrapper"> <ReactVirtualizedTable rows={rows}/></div>
      

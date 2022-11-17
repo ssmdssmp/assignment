@@ -12,9 +12,13 @@ export const tableSlice = createSlice({
     name: 'table',
     initialState: {
       rows:[],
-      nextId:1
+      nextId:1,
+      isOpenForm:false
     },
     reducers: {
+      handleIsOpenForm:(state) =>{
+        state.isOpenForm = !state.isOpenForm;
+      },
       addRow: (state, action:object) => {
         // @ts-ignore
         state.rows.push(action.payload);
@@ -35,6 +39,6 @@ export const tableSlice = createSlice({
       });
   }
 });
-  export const { addRow, deleteRow} = tableSlice.actions
+  export const { addRow, deleteRow, handleIsOpenForm} = tableSlice.actions
   
   export default tableSlice.reducer
