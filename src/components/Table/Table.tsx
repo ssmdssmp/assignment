@@ -1,51 +1,52 @@
-import * as React from 'react';
-import clsx from 'clsx';
-import { Theme, styled } from '@mui/material/styles';
-import TableCell from '@mui/material/TableCell';
-import Paper from '@mui/material/Paper';
-import xImg from '../../assets/x.svg';
-import {deleteRow} from '../../reducers/tableSlice';
-import {useDispatch} from 'react-redux';
+import { ReactNode, PureComponent } from "react";
+import clsx from "clsx";
+import { Theme, styled } from "@mui/material/styles";
+import TableCell from "@mui/material/TableCell";
+import Paper from "@mui/material/Paper";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import IconButton from "@mui/material/IconButton";
+import { deleteRow } from "../../reducers/tableSlice";
+import { useDispatch } from "react-redux";
 import {
-    AutoSizer,
-    Column,
-    Table,
-    TableCellRenderer,
-    TableHeaderProps,
-  } from 'react-virtualized';
+  AutoSizer,
+  Column,
+  Table,
+  TableCellRenderer,
+  TableHeaderProps,
+} from "react-virtualized";
 
-import { deleteItemRequest } from '../../hooks/http.hook';
+import { Row, MuiVirtualizedTableProps } from "./types";
 
+import { deleteItemRequest } from "../../hooks/requests";
 
 const classes = {
-  flexContainer: 'ReactVirtualizedDemo-flexContainer',
-  tableRow: 'ReactVirtualizedDemo-tableRow',
-  tableRowHover: 'ReactVirtualizedDemo-tableRowHover',
-  tableCell: 'ReactVirtualizedDemo-tableCell',
-  noClick: 'ReactVirtualizedDemo-noClick',
+  flexContainer: "ReactVirtualizedDemo-flexContainer",
+  tableRow: "ReactVirtualizedDemo-tableRow",
+  tableRowHover: "ReactVirtualizedDemo-tableRowHover",
+  tableCell: "ReactVirtualizedDemo-tableCell",
+  noClick: "ReactVirtualizedDemo-noClick",
 };
 
 const styles = ({ theme }: { theme: Theme }) =>
   ({
-
-    '& .ReactVirtualized__Table__headerRow': {
-      ...(theme.direction === 'rtl' && {
-        paddingLeft: '0 !important',
+    "& .ReactVirtualized__Table__headerRow": {
+      ...(theme.direction === "rtl" && {
+        paddingLeft: "0 !important",
       }),
-      ...(theme.direction !== 'rtl' && {
+      ...(theme.direction !== "rtl" && {
         paddingRight: undefined,
       }),
     },
     [`& .${classes.flexContainer}`]: {
-      display: 'flex',
-      alignItems: 'center',
-      boxSizing: 'border-box',
+      display: "flex",
+      alignItems: "center",
+      boxSizing: "border-box",
     },
     [`& .${classes.tableRow}`]: {
-      cursor: 'pointer',
+      cursor: "pointer",
     },
     [`& .${classes.tableRowHover}`]: {
-      '&:hover': {
+      "&:hover": {
         backgroundColor: theme.palette.grey[200],
       },
     },
@@ -53,33 +54,11 @@ const styles = ({ theme }: { theme: Theme }) =>
       flex: 1,
     },
     [`& .${classes.noClick}`]: {
-      cursor: 'initial',
+      cursor: "initial",
     },
   } as const);
 
-interface ColumnData {
-  dataKey: string;
-  label: string;
-  numeric?: boolean;
-  width: number;
-  editable:Boolean;
-  renderCell:any;
-}
-
-interface Row {
-  index: number;
-}
-
-interface MuiVirtualizedTableProps {
-  columns: readonly ColumnData[];
-  headerHeight?: number;
-  onRowClick?: () => void;
-  rowCount: number;
-  rowGetter: (row: Row) => Data;
-  rowHeight?: number;
-}
-
-class MuiVirtualizedTable extends React.PureComponent<MuiVirtualizedTableProps> {
+class MuiVirtualizedTable extends PureComponent<MuiVirtualizedTableProps> {
   static defaultProps = {
     headerHeight: 48,
     rowHeight: 48,
@@ -97,7 +76,6 @@ class MuiVirtualizedTable extends React.PureComponent<MuiVirtualizedTableProps> 
     const { columns, rowHeight, onRowClick } = this.props;
     return (
       <TableCell
-
         component="div"
         className={clsx(classes.tableCell, classes.flexContainer, {
           [classes.noClick]: onRowClick == null,
@@ -106,8 +84,8 @@ class MuiVirtualizedTable extends React.PureComponent<MuiVirtualizedTableProps> 
         style={{ height: rowHeight }}
         align={
           (columnIndex != null && columns[columnIndex].numeric) || false
-            ? 'right'
-            : 'left'
+            ? "right"
+            : "left"
         }
       >
         {cellData}
@@ -122,17 +100,18 @@ class MuiVirtualizedTable extends React.PureComponent<MuiVirtualizedTableProps> 
     const { headerHeight, columns } = this.props;
 
     return (
-        
       <TableCell
         component="div"
-        className={clsx(classes.tableCell, classes.flexContainer, classes.noClick)}
+        className={clsx(
+          classes.tableCell,
+          classes.flexContainer,
+          classes.noClick
+        )}
         variant="head"
         style={{ height: headerHeight }}
-        align={columns[columnIndex].numeric || false ? 'right' : 'left'}
-      > 
-      
-        {// @ts-ignore
-          <span>{label}</span>}
+        align={columns[columnIndex].numeric || false ? "right" : "left"}
+      >
+        {<span>{label as ReactNode}</span>}
       </TableCell>
     );
   };
@@ -142,16 +121,14 @@ class MuiVirtualizedTable extends React.PureComponent<MuiVirtualizedTableProps> 
     return (
       // @ts-ignore
       <AutoSizer>
-        
         {({ height, width }) => (
           // @ts-ignore
           <Table
-          
             height={height}
             width={width}
             rowHeight={rowHeight!}
             gridStyle={{
-              direction: 'inherit',
+              direction: "inherit",
             }}
             headerHeight={headerHeight!}
             {...tableProps}
@@ -186,74 +163,72 @@ const VirtualizedTable = styled(MuiVirtualizedTable)(styles);
 
 // ---
 
-interface Data {
-  calories: number;
-  carbs: number;
-  name: string;
-  fat: number;
-  id: number;
-  protein: number;
-}
-
-export default function ReactVirtualizedTable({rows}:any) {
+export default function ReactVirtualizedTable({ rows }: any) {
   const dispatch = useDispatch();
   return (
-    <Paper style={{ height: 'fit-content', minHeight:'50%', maxHeight:'80%', width: '100%' }}>
+    <Paper
+      style={{
+        height: "fit-content",
+        minHeight: "50%",
+        maxHeight: "80%",
+        width: "100%",
+      }}
+    >
       <VirtualizedTable
         rowCount={rows.length}
         rowGetter={({ index }) => rows[index]}
-        
         columns={[
           // @ts-ignore
           {
             width: 200,
-            label: 'Name',
-            dataKey: 'name',
-
-
+            label: "Name",
+            dataKey: "name",
           },
           // @ts-ignore
           {
             width: 120,
-            label: 'Calories\u00A0(g)',
-            dataKey: 'calories',
+            label: "Calories\u00A0(g)",
+            dataKey: "calories",
             numeric: true,
           },
           // @ts-ignore
           {
             width: 120,
-            label: 'Fat\u00A0(g)',
-            dataKey: 'fat',
+            label: "Fat\u00A0(g)",
+            dataKey: "fat",
             numeric: true,
           },
           // @ts-ignore
           {
             width: 120,
-            label: 'Carbs\u00A0(g)',
-            dataKey: 'carbs',
+            label: "Carbs\u00A0(g)",
+            dataKey: "carbs",
             numeric: true,
           },
           // @ts-ignore
           {
             width: 120,
-            label: 'Protein\u00A0(g)',
-            dataKey: 'protein',
+            label: "Protein\u00A0(g)",
+            dataKey: "protein",
             numeric: true,
-          }, 
+          },
           // @ts-ignore
           {
-            width:100,
-            dataKey:'xImg',
+            width: 100,
+            dataKey: "DeleteForeverIcon",
             // @ts-ignore
-            cellRenderer:({rowIndex}) => (
-              <>
-                <img onClick={() =>{
+            cellRenderer: ({ rowIndex }) => (
+              <IconButton
+                onClick={() => {
                   let id = rows.at(rowIndex).id;
                   deleteItemRequest(id);
-                  dispatch(deleteRow(id))}} style={{height:15, width:'100%'}} src={xImg} alt="" />
-              </>
-            )
-          }
+                  dispatch(deleteRow(id));
+                }}
+              >
+                <DeleteForeverIcon />
+              </IconButton>
+            ),
+          },
         ]}
       />
     </Paper>
